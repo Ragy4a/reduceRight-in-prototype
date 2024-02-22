@@ -1,6 +1,6 @@
 'use strict';
 
-function Array (...args) {
+function MyArray (...args) {
     this.length = 0;
     if (args.length) {
         for (let i = 0; i < args.length; i++) {
@@ -9,9 +9,9 @@ function Array (...args) {
     }
 };
 
-Array.prototype = new ArrayProto();
+MyArray.prototype = new MyArrayProto();
 
-function ArrayProto () {
+function MyArrayProto () {
     this.push = function () {
         if(arguments) {
             for (let i = 0; i < arguments.length; i++) {

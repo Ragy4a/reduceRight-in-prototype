@@ -21,13 +21,15 @@ function MyArrayProto () {
         return this.length;
     };
 
-    this.reduceRight = function(callback) {
-        let accumulator = this[this.length - 1];
-        let i = this.length - 2;
+    this.reduceRight = function(callback, initialValue) {
+        let accumulator = initialValue;
+        let i = this.length - 1;
+        if (!initialValue) {
+            accumulator = this[this.length - 1];
+            i = this.length - 2;
+        }
         for (; i >= 0; i--) {
-            if (i in this) {
-                accumulator = callback(accumulator, this[i], i, this);
-            }
+            accumulator = callback.call(accumulator, this[i], i, this);
         }
         return accumulator;
     };

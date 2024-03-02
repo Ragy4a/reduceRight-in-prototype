@@ -2,10 +2,8 @@
 
 function MyArray(...args) {
     this.length = 0;
-    if (args.length) {
-        for (let i = 0; i < args.length; i++) {
-            this.push(args[i]);
-        }
+    for (let i = 0; i < arguments.length; i++) {
+        this.push(arguments[i]);
     }
 }
 
@@ -16,11 +14,10 @@ function isMyArray(obj) {
 MyArray.prototype = new MyArrayProto();
 
 function MyArrayProto(...args) {
-    this.push = function () {
-        if(args) {
-            for (let i = 0; i < args.length; i++) {
-                this[this.length++] = args[i];
-            }
+
+    this.push = function (...args) {
+        for (let i = 0; i < args.length; i++) {
+            this[this.length++] = args[i];
         }
         return this.length;
     };
@@ -34,8 +31,8 @@ function MyArrayProto(...args) {
     this.concat = function (...args) {
 		const res = new MyArray();
         this.forEach(el => {
-            res.push(el);
-        });
+            res.push(el)
+        })
 		for (let i = 0; i < args.length; i++) {
 			if (Array.isArray(args[i])) {
 				res.push(...args[i]);
@@ -63,18 +60,18 @@ function MyArrayProto(...args) {
         return accumulator;
     };
     
-    this.myFlat = function(depth = 1) {
+    this.myFlat = function (depth = 1) {
         let flattenedArray = new MyArray();
-        function flatten (arrProto, depth) {
-            for(let item of arrProto) {
-                if (MyArray.isMyArray(item) && depth) {
-                    flatten(item, depth - 1)
-                } else {
-                    flattenedArray.push(item);
-                }
+        for (let i = 0; i < this.length; i++) {
+            if (isMyArray(this[i]) && depth) {
+                flattenedArray = flattenedArray.concat(this[i].myFlat(depth - 1));
+            } else {
+                flattenedArray.push(this[i]);
             }
         }
-        flatten(this, depth);
         return flattenedArray;
     };
+	
 };
+const nestedArr = new MyArray(2, new MyArray(3, new MyArray(4, new MyArray(5, new MyArray(6)))))
+console.log(nestedArr.myFlat(4));

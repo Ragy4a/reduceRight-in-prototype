@@ -2,8 +2,8 @@
 
 function MyArray(...args) {
     this.length = 0;
-    for (let i = 0; i < arguments.length; i++) {
-        this.push(arguments[i]);
+    for (let i = 0; i < args.length; i++) {
+        this.push(args[i]);
     }
 }
 
@@ -13,7 +13,7 @@ function isMyArray(obj) {
 
 MyArray.prototype = new MyArrayProto();
 
-function MyArrayProto(...args) {
+function MyArrayProto() {
 
     this.push = function (...args) {
         for (let i = 0; i < args.length; i++) {
@@ -63,9 +63,9 @@ function MyArrayProto(...args) {
     this.myFlat = function (depth = 1) {
         let flattenedArray = new MyArray();
         for (let i = 0; i < this.length; i++) {
-            if (isMyArray(this[i]) && depth) {
+            if (isMyArray(this[i]) && depth > 0) {
                 flattenedArray = flattenedArray.concat(this[i].myFlat(depth - 1));
-            } else {
+            } else if (this[i] !== undefined) {
                 flattenedArray.push(this[i]);
             }
         }
